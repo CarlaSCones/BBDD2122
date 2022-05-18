@@ -1,0 +1,4 @@
+/custom.properties
+
+# Project exclude paths
+/target/

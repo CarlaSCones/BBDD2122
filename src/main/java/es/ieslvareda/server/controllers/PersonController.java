@@ -21,7 +21,6 @@ import java.util.List;
 
 public class PersonController {
 
-
     static Logger logger = LoggerFactory.getLogger(PersonController.class);
 
     private static PersonService service = new ImpPersonService();

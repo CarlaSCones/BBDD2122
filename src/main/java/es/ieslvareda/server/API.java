@@ -9,6 +9,9 @@ public class API {
 
         // Oracle
         public static final String AUTHENTICATE = "/authenticate";
+        public static final String VEHICULOS = "/vehiculos";
+        public static final String VEHICULO = "/vehiculo";
+
     }
 
 }

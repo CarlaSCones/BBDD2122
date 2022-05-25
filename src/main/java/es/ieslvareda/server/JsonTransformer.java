@@ -9,8 +9,7 @@ import spark.ResponseTransformer;
 import java.lang.reflect.Type;
 
 public class JsonTransformer<T> implements ResponseTransformer {
-    //private final Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy").create();
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy").create();
     @Override
     public String render(Object model) {
         return gson.toJson(model);

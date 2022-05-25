@@ -28,22 +28,32 @@ public class App {
 
         post(API.Routes.VEHICULO, VehiculoController::addVehiculo, new JsonTransformer<>());
         //localhost:4567/vehiculo
-        //body/raw:{
-        //        //    matricula: '1111ABD',
-        //        //    preciohora: 15,
-        //        //    marca: 'KIA',
-        //        //    color: 'negro'
-        //        //}
+        //body/raw:
+        //    matricula: '0123plj',
+        //    preciohora: 5,
+        //    marca: 'Ford',
+        //    color: 'rojo',
+        //    bateria: 45,
+        //    fechaadq: '07/01/21',
+        //    estado: 'preparado',
+        //    idCarnet: 2,
+        //    changedBy: 'initial'
+        //}
         //
 
         put(API.Routes.VEHICULO, VehiculoController::updateVehiculo,new JsonTransformer<>());
         //localhost:4567/vehiculo
-        //body/raw:{
-        //        //    matricula: '1111ABC',
-        //        //    preciohora: 15,
-        //        //    marca: 'KIA',
-        //        //    color: 'negro'
-        //        //}
+        //body/raw:
+        //    matricula: '0123plj',
+        //    preciohora: 5,
+        //    marca: 'Ford',
+        //    color: 'rojo',
+        //    bateria: 45,
+        //    fechaadq: '07/01/21',
+        //    estado: 'preparado',
+        //    idCarnet: 2,
+        //    changedBy: 'initial'
+        //}
         //
 
         delete(API.Routes.VEHICULO, VehiculoController::deleteVehiculo, new JsonTransformer<>());

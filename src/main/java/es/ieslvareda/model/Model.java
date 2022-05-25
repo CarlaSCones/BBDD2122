@@ -3,7 +3,6 @@ package es.ieslvareda.model;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Model {
@@ -32,24 +31,38 @@ public class Model {
     public List<Vehiculo> getVehiculos(){
 
         List<Vehiculo> vehiculoList = new ArrayList<>();
-        DataSource dataSource = MyDataSource.getMyMariaDBDataSource();
+        DataSource dataSource = MyDataSource.getMyOracleDataSource();
 
         try(Connection con = dataSource.getConnection();
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery("select * from vehiculo")){
 
             String matricula;
-            float preciohora;
-            String modelo;
+            int preciohora;
+            String marca;
+            String descripcion;
             String color;
+            int bateria;
+            java.sql.Date fechaadq;
+            String estado;
+            int idCarnet;
+            Date changedTS;
+            String changedBy;
 
             while(resultSet.next()){
                 matricula = resultSet.getString("matricula");
-                preciohora = resultSet.getFloat("preciohora");
-                modelo = resultSet.getString("modelo");
+                preciohora = resultSet.getInt("preciohora");
+                marca = resultSet.getString("marca");
+                descripcion = resultSet.getString("descripcion");
                 color = resultSet.getString("color");
+                bateria = resultSet.getInt("bateria");
+                fechaadq = resultSet.getDate("fechaadq");
+                estado = resultSet.getString("estado");
+                idCarnet = resultSet.getInt("idCarnet");
+                changedTS = resultSet.getDate("changedTS");
+                changedBy = resultSet.getString("changedBy");
 
-                vehiculoList.add(new Vehiculo(matricula,preciohora,modelo,color));
+                vehiculoList.add(new Vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idCarnet,changedTS,changedBy));
 
             }
 
@@ -65,20 +78,14 @@ public class Model {
 
     public Vehiculo addVehiculo(Vehiculo vehiculo){
 
-        DataSource ds = MyDataSource.getMyMariaDBDataSource();
-
-        int bateria = 0;
-        Date fechaAdq = new Date(22/02/2022);
-        String estado = "a";
-        int idCarnet = 0;
-        Timestamp changedTS = new Timestamp(fechaAdq.getTime());
-        String changedBy = "a";
+        DataSource ds = MyDataSource.getMyOracleDataSource();
 
         try(Connection con = ds.getConnection();
             Statement statement = con.createStatement();){
             String sql = "INSERT INTO " + "vehiculo VALUES ('" +vehiculo.getMatricula()+ "','" +  vehiculo.getPreciohora() + "','"
-                    + vehiculo.getMarca()+ "','" +vehiculo.getColor() +  "','" + bateria +  "','" + fechaAdq + "','" + estado + "','"
-                    + idCarnet + "','" + changedTS + "','" + changedBy + "');";
+                    + vehiculo.getMarca()+ "','" +vehiculo.getDescripcion() +"','" +vehiculo.getColor() +  "','" + vehiculo.getBateria() + "','" + vehiculo.getFechaadq()
+                    + "','" +vehiculo.getEstado() + "','" + vehiculo.getIdCarnet() +  "','" + vehiculo.getChangedTS() +
+                    "','" + vehiculo.getChangedBy() + "');";
             int count = statement.executeUpdate(sql);
             System.out.println(count);
 
@@ -90,20 +97,13 @@ public class Model {
 
     public int updateVehiculo(Vehiculo vehiculo) {
 
-        DataSource ds = MyDataSource.getMyMariaDBDataSource();
+        DataSource ds = MyDataSource.getMyOracleDataSource();
         int count = 0;
-
-        int bateria = 0;
-        Date fechaAdq = new Date(22/02/2022);
-        String estado = "a";
-        int idCarnet = 0;
-        Timestamp changedTS = new Timestamp(fechaAdq.getTime());
-        String changedBy = "a";
 
         String sql = "UPDATE vehiculo SET " +
                 "matricula='" + vehiculo.getMatricula() + "', preciohora='" + vehiculo.getPreciohora() + "', marca='"
-                + vehiculo.getMarca() + "', color='" + vehiculo.getColor() + "', bateria='" + bateria + "', fechaAdq='"
-                + fechaAdq + "', estado='" + estado + "', idCarnet='" + idCarnet + "', changedTS='" + changedTS + "', changedBy='" + changedBy;
+                + vehiculo.getMarca() + "', descripcion='" + vehiculo.getDescripcion() + "', color='" + vehiculo.getColor() + "', bateria='" + vehiculo.getBateria() + "', fechaAdq='"
+                + vehiculo.getFechaadq() + "', estado='" + vehiculo.getEstado() + "', idCarnet='" + vehiculo.getIdCarnet() + "', changedTS='" + vehiculo.getChangedTS() + "', changedBy='" + vehiculo.getChangedBy();
         try (Connection con = ds.getConnection();
              Statement statement = con.createStatement();) {
 
@@ -117,7 +117,7 @@ public class Model {
     }
 
     public int deldeteVehiculo(String matricula){
-        DataSource ds = MyDataSource.getMyMariaDBDataSource();
+        DataSource ds = MyDataSource.getMyOracleDataSource();
         int count = 0;
         String sql = "DELETE FROM vehiculo WHERE matricula LIKE ? RETURNING preciohora,marca,color";
         try (Connection con = ds.getConnection();
@@ -139,7 +139,7 @@ public class Model {
     public List<Person> getPersons(){
 
         List<Person> personList = new ArrayList<>();
-        DataSource dataSource = MyDataSource.getMyMariaDBDataSource();
+        DataSource dataSource = MyDataSource.getMyOracleDataSource();
 
         try(Connection con = dataSource.getConnection();
             Statement statement = con.createStatement();

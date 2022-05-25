@@ -8,32 +8,47 @@ import es.ieslvareda.model.Vehiculo;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ImpVehiculoService implements VehiculoService{
+
+    //Descargar oracle18 txd para conectarme desde casa
     @Override
     public List<Vehiculo> getAll() {
 
         List<Vehiculo> vehiculoList = new ArrayList<>();
-        DataSource dataSource = MyDataSource.getMyMariaDBDataSource();
+        DataSource dataSource = MyDataSource.getMyOracleDataSource();
 
         try(Connection con = dataSource.getConnection();
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery("select * from vehiculo")){
 
             String matricula;
-            float preciohora;
-            String modelo;
+            int preciohora;
+            String marca;
+            String descripcion;
             String color;
+            int bateria;
+            java.sql.Date fechaadq;
+            String estado;
+            int idCarnet;
+            Date changedTS;
+            String changedBy;
 
             while(resultSet.next()){
                 matricula = resultSet.getString("matricula");
-                preciohora = resultSet.getFloat("preciohora");
-                modelo = resultSet.getString("modelo");
+                preciohora = resultSet.getInt("preciohora");
+                marca = resultSet.getString("marca");
+                descripcion = resultSet.getString("descripcion");
                 color = resultSet.getString("color");
+                bateria = resultSet.getInt("bateria");
+                fechaadq = resultSet.getDate("fechaadq");
+                estado = resultSet.getString("estado");
+                idCarnet = resultSet.getInt("idCarnet");
+                changedTS = resultSet.getDate("changedTS");
+                changedBy = resultSet.getString("changedBy");
 
-                vehiculoList.add(new Vehiculo(matricula,preciohora,modelo,color));
+                vehiculoList.add(new Vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idCarnet,changedTS,changedBy));
 
             }
 
@@ -45,24 +60,39 @@ public class ImpVehiculoService implements VehiculoService{
 
     @Override
     public Result<Vehiculo> get(String matricula) {
-        DataSource dataSource = MyDataSource.getMyMariaDBDataSource();
+        DataSource dataSource = MyDataSource.getMyOracleDataSource();
 
         try (Connection con = dataSource.getConnection();
              Statement statement = con.createStatement();
-             ResultSet resultSet = statement.executeQuery("select * from person where matricula='" + matricula + "'")) {
+             ResultSet resultSet = statement.executeQuery("select * from vehiculo where matricula='" + matricula + "'")) {
 
-            float preciohora;
-            String modelo;
+            int preciohora;
+            String marca;
+            String descripcion;
             String color;
+            int bateria;
+            java.sql.Date fechaadq;
+            String estado;
+            int idCarnet;
+            Date changedTS;
+            String changedBy;
 
             if (resultSet.next()) {
 
-                preciohora = resultSet.getFloat("preciohora");
-                modelo = resultSet.getString("modelo");
+                preciohora = resultSet.getInt("preciohora");
+                marca = resultSet.getString("marca");
+                descripcion = resultSet.getString("descripcion");
                 color = resultSet.getString("color");
+                bateria = resultSet.getInt("bateria");
+                fechaadq = resultSet.getDate("fechaadq");
+                estado = resultSet.getString("estado");
+                idCarnet = resultSet.getInt("idCarnet");
+                changedTS = resultSet.getDate("changedTS");
+                changedBy = resultSet.getString("changedBy");
 
-                Vehiculo vehiculo = new Vehiculo(matricula, preciohora, modelo, color);
+                Vehiculo vehiculo = new Vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idCarnet,changedTS,changedBy);
                 return new Result.Success<>(vehiculo);
+
 
             } else {
                 return new Result.Error("No se ha encontrado el matricula " + matricula, 404);
@@ -80,29 +110,23 @@ public class ImpVehiculoService implements VehiculoService{
     @Override
     public Result<Vehiculo> update(Vehiculo vehiculo) {
 
-        DataSource ds = MyDataSource.getMyMariaDBDataSource();
+        DataSource ds = MyDataSource.getMyOracleDataSource();
 
-        int bateria = 0;
-        Date fechaAdq = new Date(22/02/2022);
-        String estado = "a";
-        int idCarnet = 0;
-        Timestamp changedTS = new Timestamp(fechaAdq.getTime());
-        String changedBy = "a";
-
-        String sql = "UPDATE vehiculo SET preciohora=?,marca=?,color=?,bateria=?,fechaAdq=?,estado=?,idCarnet=?,changedTS=?,changedBy=? WHERE matricula LIKE ?";
+        String sql = "UPDATE vehiculo SET preciohora=?,marca=?,descripcion=?,color=?,bateria=?,fechaAdq=?,estado=?,idCarnet=?,changedTS=?,changedBy=? WHERE matricula LIKE ?";
         try (Connection con = ds.getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql);
         ) {
             int pos = 0;
             pstmt.setFloat(++pos, vehiculo.getPreciohora());
             pstmt.setString(++pos, vehiculo.getMarca());
+            pstmt.setString(++pos, vehiculo.getDescripcion());
             pstmt.setString(++pos, vehiculo.getColor());
-            pstmt.setInt(++pos, bateria);
-            pstmt.setDate(++pos, (java.sql.Date) fechaAdq);
-            pstmt.setString(++pos, estado);
-            pstmt.setInt(++pos, idCarnet);
-            pstmt.setTimestamp(++pos, changedTS);
-            pstmt.setString(++pos, changedBy);
+            pstmt.setInt(++pos, vehiculo.getBateria());
+            pstmt.setDate(++pos, vehiculo.getFechaadq());
+            pstmt.setString(++pos, vehiculo.getEstado());
+            pstmt.setInt(++pos, vehiculo.getIdCarnet());
+            pstmt.setDate(++pos, vehiculo.getChangedTS());
+            pstmt.setString(++pos, vehiculo.getChangedBy());
             pstmt.setString(++pos, vehiculo.getMatricula());
             int cant = pstmt.executeUpdate();
             if (cant == 1)
@@ -116,21 +140,15 @@ public class ImpVehiculoService implements VehiculoService{
 
     @Override
     public Result<Vehiculo> add(Vehiculo vehiculo) {
-        DataSource ds = MyDataSource.getMyMariaDBDataSource();
-
-        int bateria = 0;
-        Date fechaAdq = new Date(22/02/2022);
-        String estado = "a";
-        int idCarnet = 0;
-        Timestamp changedTS = new Timestamp(fechaAdq.getTime());
-        String changedBy = "a";
+        DataSource ds = MyDataSource.getMyOracleDataSource();
 
         try(Connection con = ds.getConnection();
             Statement statement = con.createStatement();){
             String sql = "INSERT INTO " + "vehiculo VALUES ('" +vehiculo.getMatricula()+ "','"
-                    +vehiculo.getPreciohora()+ "','" +vehiculo.getMarca()+ "'," +vehiculo.getColor()+
-                    "'," +bateria+ "'," +fechaAdq+ "'," +estado+ "'," +idCarnet+  "'," +changedTS+
-                    "'," +changedBy+ ")";
+                    +vehiculo.getPreciohora()+ "','" +vehiculo.getMarca()+ "','" + vehiculo.getDescripcion()+ "','" +vehiculo.getColor()+
+                    "','" +vehiculo.getBateria()+ "',to_date('"+vehiculo.getFechaadq()+"','YYYY-MM-dd'),'" +vehiculo.getEstado()+
+                    "','" +vehiculo.getIdCarnet()+  "',to_date('" +vehiculo.getChangedTS()+
+                    "','YYYY-MM-dd'),'" +vehiculo.getChangedBy()+ "')";
 
             int count = statement.executeUpdate(sql);
             if(count==1)
@@ -146,8 +164,8 @@ public class ImpVehiculoService implements VehiculoService{
 
     @Override
     public Result<Vehiculo> delete(String matricula) {
-        DataSource ds = MyDataSource.getMyMariaDBDataSource();
-        String sql = "DELETE FROM vehiculo WHERE matricula LIKE ? RETURNING preciohora,marca,color";
+        DataSource ds = MyDataSource.getMyOracleDataSource();
+        String sql = "DELETE FROM vehiculo WHERE matricula LIKE ? RETURNING preciohora,marca,color,bateria,fechaadq,estado,idCarnet,changedBy";
         try (Connection con = ds.getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql);
         ) {
@@ -157,7 +175,9 @@ public class ImpVehiculoService implements VehiculoService{
 
             ResultSet rs = pstmt.getResultSet();
             if (rs.next()) {
-                Vehiculo vehiculo = new Vehiculo(matricula, rs.getFloat("preciohora"), rs.getString("marca"), rs.getString("color"));
+                Vehiculo vehiculo = new Vehiculo(matricula, rs.getInt("preciohora"), rs.getString("marca"),rs.getString("descripcion"),
+                        rs.getString("color"), rs.getInt("bateria"), rs.getDate("fechaadq"), rs.getString("estado"),
+                        rs.getInt("idCarnet"), rs.getDate("changedTS"), rs.getString("changedBy"));
                 return new Result.Success<Vehiculo>(vehiculo);
             }
             return new Result.Error("Ningun vehiculo eliminado",404);

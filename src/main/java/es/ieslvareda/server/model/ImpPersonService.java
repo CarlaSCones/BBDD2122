@@ -124,8 +124,6 @@ public class ImpPersonService implements PersonService {
         }
     }
 
-
-
     @Override
     public Result<Person> delete(String dni) {
         DataSource ds = MyDataSource.getMyMariaDBDataSource();

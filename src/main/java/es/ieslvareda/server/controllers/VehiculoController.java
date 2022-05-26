@@ -72,6 +72,7 @@ public class VehiculoController {
     }
 
     public static Result<Vehiculo> deleteVehiculo(Request req, Response res) {
+
         logger.info("Request vehiculo by matricula: " + req.queryParams("matricula") );
         String matricula = req.queryParams("matricula");
         Result<Vehiculo> result = service.delete(matricula);

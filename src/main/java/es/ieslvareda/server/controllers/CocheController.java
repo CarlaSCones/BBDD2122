@@ -72,7 +72,7 @@ public class CocheController {
     }
 
     public static Result<Coche> deleteCoche(Request req, Response res) {
-        logger.info("Request person by matricula: " + req.queryParams("matricula") );
+        logger.info("Request coche by matricula: " + req.queryParams("matricula"));
         String matricula = req.queryParams("matricula");
         Result<Coche> result = service.delete(matricula);
         res.type("application/json");

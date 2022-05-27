@@ -119,7 +119,7 @@ public class ImpCocheService implements CocheService {
     @Override
     public Result<Coche> delete(String matricula) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "DELETE FROM coche WHERE matricula LIKE ? RETURNING numPlazas,numPuertas";
+        String sql = "DELETE * FROM coche WHERE matricula LIKE ? RETURNING numPlazas,numPuertas";
         try (Connection con = ds.getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql);
         ) {

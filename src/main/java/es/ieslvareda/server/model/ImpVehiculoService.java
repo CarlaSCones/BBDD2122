@@ -146,10 +146,11 @@ public class ImpVehiculoService implements VehiculoService{
             Statement statement = con.createStatement();){
             String sql = "INSERT INTO " + "vehiculo VALUES ('" +vehiculo.getMatricula()+ "','"
                     +vehiculo.getPreciohora()+ "','" +vehiculo.getMarca()+ "','" +vehiculo.getDescripcion()+ "','" +vehiculo.getColor()+
-                    "','" +vehiculo.getBateria()+ "',to_date ('"+vehiculo.getFechaadq()+"','yyyy/mm/dd'),'" +vehiculo.getEstado()+
-                    "','" +vehiculo.getIdCarnet()+  "',to_date ('" +vehiculo.getChangedTS()+
-                    "','yyyy/mm/dd'),'" +vehiculo.getChangedBy()+ "')";
+                    "','" +vehiculo.getBateria()+ "',to_date('"+vehiculo.getFechaadq()+"', 'dd.mm.yyyy'),'" +vehiculo.getEstado()+
+                    "','" +vehiculo.getIdCarnet()+  "',to_date('" +vehiculo.getChangedTS()+
+                    "', 'dd.mm.yyyy'),'" +vehiculo.getChangedBy()+ "')";
 
+            //to_date('02.02.2020', 'dd.mm.yyyy')
             int count = statement.executeUpdate(sql);
             if(count==1)
                 return new Result.Success<>(vehiculo);

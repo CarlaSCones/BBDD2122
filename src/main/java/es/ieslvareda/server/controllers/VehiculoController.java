@@ -1,6 +1,5 @@
 package es.ieslvareda.server.controllers;
 
-import es.ieslvareda.model.Person;
 import es.ieslvareda.model.Result;
 import es.ieslvareda.model.Vehiculo;
 import es.ieslvareda.server.model.*;

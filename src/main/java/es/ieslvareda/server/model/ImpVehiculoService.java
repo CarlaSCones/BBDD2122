@@ -1,7 +1,6 @@
 package es.ieslvareda.server.model;
 
 import es.ieslvareda.model.MyDataSource;
-import es.ieslvareda.model.Person;
 import es.ieslvareda.model.Result;
 import es.ieslvareda.model.Vehiculo;
 

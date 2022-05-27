@@ -2,7 +2,6 @@ package es.ieslvareda.server.model;
 
 import es.ieslvareda.model.Coche;
 import es.ieslvareda.model.MyDataSource;
-import es.ieslvareda.model.Person;
 import es.ieslvareda.model.Result;
 
 import javax.sql.DataSource;
@@ -119,7 +118,7 @@ public class ImpCocheService implements CocheService {
     @Override
     public Result<Coche> delete(String matricula) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "DELETE * FROM coche WHERE matricula LIKE ? RETURNING numPlazas,numPuertas";
+        String sql = "DELETE FROM coche WHERE matricula = ?";
         try (Connection con = ds.getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql);
         ) {

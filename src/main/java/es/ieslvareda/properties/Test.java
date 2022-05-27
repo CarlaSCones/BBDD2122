@@ -1,7 +1,6 @@
 package es.ieslvareda.properties;
 
 import es.ieslvareda.model.Model;
-import es.ieslvareda.model.Person;
 
 public class Test {
     public static void main(String[] args) {

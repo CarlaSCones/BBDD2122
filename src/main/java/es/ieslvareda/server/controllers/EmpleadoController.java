@@ -3,7 +3,7 @@ package es.ieslvareda.server.controllers;
 import es.ieslvareda.model.AuthenticateData;
 import es.ieslvareda.model.Empleado;
 import es.ieslvareda.model.Result;
-import es.ieslvareda.server.model.IEmpleadoService;
+import es.ieslvareda.server.model.EmpleadoService;
 import es.ieslvareda.server.model.ImpEmpleadoService;
 import es.ieslvareda.server.model.JsonTransformer;
 import org.slf4j.Logger;
@@ -15,7 +15,7 @@ public class EmpleadoController {
 
     static Logger logger = LoggerFactory.getLogger(EmpleadoController.class);
     static JsonTransformer<Empleado> jse = new JsonTransformer<>();
-    static IEmpleadoService service = new ImpEmpleadoService();
+    static EmpleadoService service = new ImpEmpleadoService();
 
 
     public static Result<Empleado> authenticate(Request request, Response response) {

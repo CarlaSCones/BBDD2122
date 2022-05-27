@@ -28,6 +28,7 @@ public class Model {
         return auth;
     }
 
+    //Tabla Vehiculo
     public List<Vehiculo> getVehiculos(){
 
         List<Vehiculo> vehiculoList = new ArrayList<>();
@@ -120,6 +121,91 @@ public class Model {
         DataSource ds = MyDataSource.getMyOracleDataSource();
         int count = 0;
         String sql = "DELETE FROM vehiculo WHERE matricula LIKE ? RETURNING preciohora,marca,color";
+        try (Connection con = ds.getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql);) {
+
+            int pos = 0;
+            pstmt.setString(++pos,matricula);
+            System.out.println("Eliminado");
+            return count = pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    //Tabla Coche
+
+    public List<Coche> getCoches(){
+
+        List<Coche> personList = new ArrayList<>();
+        DataSource dataSource = MyDataSource.getMyOracleDataSource();
+
+        try(Connection con = dataSource.getConnection();
+            Statement statement = con.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from coche")){
+
+            String matricula;
+            int numPlazas;
+            int numPuertas;
+
+            while(resultSet.next()){
+                matricula = resultSet.getString("matricula");
+                numPlazas = resultSet.getInt("numPlazas");
+                numPuertas = resultSet.getInt("numPuertas");
+
+                personList.add(new Coche(matricula,numPlazas,numPuertas));
+
+            }
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+        return personList;
+
+    }
+
+    public Coche addCoche(Coche coche){
+        DataSource ds = MyDataSource.getMyOracleDataSource();
+
+        try(Connection con = ds.getConnection();
+            Statement statement = con.createStatement();){
+            String sql = "INSERT INTO " + "coche VALUES ('" +coche.getMatricula()+ "','" +  coche.getNumPlazas()+ "','"
+                    + coche.getNumPuertas()+ "');";
+            int count = statement.executeUpdate(sql);
+            System.out.println(count);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return coche;
+    }
+
+    public int updateCoche(Coche coche) {
+        DataSource ds = MyDataSource.getMyOracleDataSource();
+        int count = 0;
+        String sql = "UPDATE coche SET " +
+                "matricula='" + coche.getMatricula() + "', numPlazas='" + coche.getNumPlazas() + "', numPuertas='" + coche.getNumPuertas();
+        try (Connection con = ds.getConnection();
+             Statement statement = con.createStatement();) {
+
+            count = statement.executeUpdate(sql);
+            System.out.println(count);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    public int deldeteCoche(String matricula){
+        DataSource ds = MyDataSource.getMyOracleDataSource();
+        int count = 0;
+        String sql = "DELETE FROM coche WHERE matricula LIKE ? RETURNING numPlazas,numPuertas";
         try (Connection con = ds.getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql);) {
 

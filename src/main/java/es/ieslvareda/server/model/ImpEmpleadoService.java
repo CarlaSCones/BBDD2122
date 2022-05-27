@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ImpEmpleadoService implements IEmpleadoService{
+public class ImpEmpleadoService implements EmpleadoService {
     @Override
     public Result<Empleado> authenticate(AuthenticateData authenticateData) {
 

@@ -1,5 +1,6 @@
 package es.ieslvareda.server;
 
+import es.ieslvareda.server.controllers.CocheController;
 import es.ieslvareda.server.controllers.EmpleadoController;
 import es.ieslvareda.server.controllers.PersonController;
 import es.ieslvareda.server.controllers.VehiculoController;
@@ -20,6 +21,36 @@ public class App {
         //    passwd:"1111"
         //}
 
+        //Tabla coche
+        get(API.Routes.COCHES, CocheController::getCoches, new JsonTransformer<>());
+        //localhost:4567/coches
+
+        get(API.Routes.COCHE, CocheController::getCoche,new JsonTransformer<>());
+        //localhost:4567/coche?matricula=0000AAA
+
+        post(API.Routes.COCHE, CocheController::addCoche, new JsonTransformer<>());
+        //localhost:4567/coche
+        //body/raw:{
+        //    matricula: '0000ABA',
+        //    numPlazas: 5,
+        //    numPuertas: 4
+        //}
+        //
+
+        put(API.Routes.COCHE, CocheController::updateCoche,new JsonTransformer<>());
+        //localhost:4567/coche
+        //body/raw:{
+        //    matricula: '0000ABA',
+        //    numPlazas: 5,
+        //    numPuertas: 4
+        //}
+        //
+
+        delete(API.Routes.COCHE, CocheController::deleteCoche, new JsonTransformer<>());
+        //localhost:4567/coche?matricula=0000AAA
+
+
+        //Tabla Vehiculo
         get(API.Routes.VEHICULOS, VehiculoController::getVehiculos, new JsonTransformer<>());
         //localhost:4567/vehiculos
 

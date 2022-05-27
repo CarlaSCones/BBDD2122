@@ -12,6 +12,9 @@ public class API {
         public static final String VEHICULOS = "/vehiculos";
         public static final String VEHICULO = "/vehiculo";
 
+        public static final String COCHES = "/coches";
+        public static final String COCHE = "/coche";
+
     }
 
 }

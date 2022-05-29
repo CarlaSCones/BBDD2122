@@ -13,7 +13,8 @@ public class Model {
     public boolean authenticate(String email, String password){
         boolean auth = false;
         DataSource ds = MyDataSource.getMyMariaDBDataSource();
-        String sql = "SELECT COUNT(*) FROM EMPLEADO WHERE" + "EMAIL='" + email + "'AND " + "PASSWORD=ENCRYPT_PASWD.encrypt_val('"
+        String sql = "SELECT COUNT(*) FROM EMPLEADO WHERE" + "EMAIL='" + email
+                + "'AND " + "PASSWORD=ENCRYPT_PASWD.encrypt_val('"
                 +password+"')";
         try(Connection con = ds.getConnection();
             Statement statement = con.createStatement();
@@ -158,7 +159,7 @@ public class Model {
 
     public List<Coche> getCoches(){
 
-        List<Coche> personList = new ArrayList<>();
+        List<Coche> cocheList = new ArrayList<>();
         DataSource dataSource = MyDataSource.getMyOracleDataSource();
 
         try(Connection con = dataSource.getConnection();
@@ -174,7 +175,7 @@ public class Model {
                 numPlazas = resultSet.getInt("numPlazas");
                 numPuertas = resultSet.getInt("numPuertas");
 
-                personList.add(new Coche(matricula,numPlazas,numPuertas));
+                cocheList.add(new Coche(matricula,numPlazas,numPuertas));
 
             }
 
@@ -184,7 +185,7 @@ public class Model {
         }
 
 
-        return personList;
+        return cocheList;
 
     }
 

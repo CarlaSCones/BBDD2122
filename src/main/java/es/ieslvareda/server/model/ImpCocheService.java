@@ -124,14 +124,15 @@ public class ImpCocheService implements CocheService {
         ) {
             int pos = 0;
             pstmt.setString(++pos, matricula);
-            int cant = pstmt.executeUpdate();
+            pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getResultSet();
             if (rs.next()) {
                 Coche coche = new Coche(matricula, rs.getInt("numPlazas"), rs.getInt("numPuertas"));
                 return new Result.Success<Coche>(coche);
-            }
-            return new Result.Error("Ningun coche eliminado",404);
+            }else
+                return new Result.Error("Ningun coche eliminado",404);
+
         } catch (Exception e) {
             return new Result.Error(e.getMessage(),404);
         }

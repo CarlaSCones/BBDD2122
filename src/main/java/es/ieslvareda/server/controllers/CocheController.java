@@ -19,13 +19,13 @@ public class CocheController {
     private static JsonTransformer<Coche> jsonTransformer = new JsonTransformer<>();
 
     public static List<Coche> getCoches(Request req, Response res){
-        logger.info("Receiving request for all coches");
+        logger.info("Recibiendo solicitud de todos los coches...");
         return service.getAll();
     }
 
     public static Result<Coche> getCoche(Request req, Response res) {
         String matricula= req.queryParams("matricula");
-        logger.info("Get person with matricula = " + matricula);
+        logger.info("Consiguiendo coche con matricula = " + matricula + "...");
 
         Result result = service.get(matricula);
         res.type("application/json");
@@ -40,7 +40,7 @@ public class CocheController {
     }
 
     public static Result<Coche> addCoche(Request request, Response response) {
-        logger.info("Add new coche");
+        logger.info("Añadiendo nuevo coche...");
         String body = request.body();
         Coche coche = jsonTransformer.getObjet(body, Coche.class);
         Result<Coche> result =  service.add(coche);
@@ -57,8 +57,10 @@ public class CocheController {
     }
 
     public static Result<Coche> updateCoche(Request req, Response res) {
-        logger.info("Updating coche ");
-        Coche coche = (Coche) jsonTransformer.getObjet(req.body(), Coche.class);
+        logger.info("Actualizandoo coche...");
+        String body = req.body();
+
+        Coche coche = jsonTransformer.getObjet(body, Coche.class);
         Result<Coche> result = service.update(coche);
         res.type("application/json");
 
@@ -72,8 +74,9 @@ public class CocheController {
     }
 
     public static Result<Coche> deleteCoche(Request req, Response res) {
-        logger.info("Request coche by matricula: " + req.queryParams("matricula"));
         String matricula = req.queryParams("matricula");
+        logger.info("Eliminando coche con matricula " + matricula + "...");
+
         Result<Coche> result = service.delete(matricula);
         res.type("application/json");
 

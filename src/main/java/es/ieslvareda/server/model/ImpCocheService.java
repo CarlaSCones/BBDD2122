@@ -81,12 +81,12 @@ public class ImpCocheService implements CocheService {
              PreparedStatement pstmt = con.prepareStatement(sql);
         ) {
             int pos = 0;
-            pstmt.setInt(++pos, coche.getNumPuertas());
             pstmt.setInt(++pos, coche.getNumPlazas());
+            pstmt.setInt(++pos, coche.getNumPuertas());
             pstmt.setString(++pos, coche.getMatricula());
             int cant = pstmt.executeUpdate();
             if (cant == 1)
-                return new Result.Success<Coche>(coche);
+                return new Result.Success<>(coche);
             else
                 return new Result.Error("Ningun coche actualizado", 404);
         } catch (Exception e) {
@@ -129,11 +129,12 @@ public class ImpCocheService implements CocheService {
             ResultSet rs = pstmt.getResultSet();
             if (rs.next()) {
                 Coche coche = new Coche(matricula, rs.getInt("numPlazas"), rs.getInt("numPuertas"));
-                return new Result.Success<Coche>(coche);
+                return new Result.Success<>(coche);
             }else
                 return new Result.Error("Ningun coche eliminado",404);
 
         } catch (Exception e) {
+            e.printStackTrace();
             return new Result.Error(e.getMessage(),404);
         }
     }
